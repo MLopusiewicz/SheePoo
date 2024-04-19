@@ -81,9 +81,11 @@ public class MicrophoneBarkDetector : MonoBehaviour
 
         // dB as they show in the audio mixer
 
-        if(_dbValue > _minBarkDb && _lastDb <= _minBarkDb)
+        var justCrossedThreshold = _dbValue > _minBarkDb && _lastDb <= _minBarkDb;
+        if (!_minDetectedWaitingForPeak && justCrossedThreshold)
         {
             Debug.Log("bark chance starting...");
+
             _highestDb = _minBarkDb;
             // actually give a window of a few secs to see if it gets higher
             _minDetectedWaitingForPeak = true;
@@ -101,6 +103,7 @@ public class MicrophoneBarkDetector : MonoBehaviour
             }
 
             if(_highestDb > _minBarkDb) Bark();
+            else _minDetectedWaitingForPeak = false;
             _corroutine = null;
         }
 
