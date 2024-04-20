@@ -28,7 +28,6 @@ public class MicrophoneBarkDetector : MonoBehaviour
     private float _lastDb;
     private float _highestDb;
 
-    private bool _canBark = true;
 
     private Coroutine _corroutine;
 
@@ -49,6 +48,9 @@ public class MicrophoneBarkDetector : MonoBehaviour
     public float DBValueNormalizedToBarkRange => Mathf.InverseLerp(_minBarkDbInUse, _maxBarkDbInUse, _dbValue);
 
     public float NoBarkDB => _noBarkDb;
+
+    private bool _hadSilenceBefore = true;
+    private bool _waitingForReset;
 
     private void Awake()
     {
@@ -156,23 +158,31 @@ public class MicrophoneBarkDetector : MonoBehaviour
         else _dbValue = Mathf.Lerp(_dbValue, currentDBbValue, Time.deltaTime * _downLerpStrength);
 
         var justCrossedThreshold = _dbValue > _minBarkDbInUse && _lastDb <= _minBarkDbInUse;
-        if (_canBark && justCrossedThreshold)
+        if (!_waitingForReset && _hadSilenceBefore && justCrossedThreshold)
         {
             Debug.Log($"bark chance starting...: {_dbValue}");
 
             _highestDb = _dbValue;
-            _canBark = false;
+            _hadSilenceBefore = false;
         }
-        else if (!_canBark)
+        
+        else if (!_hadSilenceBefore && !_waitingForReset)
         {
             _highestDb = Mathf.Max(_highestDb, _dbValue);
 
             if (_dbValue < _lastDb)
             {
                 Bark();
-                _canBark = true;
+                _waitingForReset = true;
+                _hadSilenceBefore = true;
                 _highestDb = MinDB;
             }
+        }
+
+        if(_waitingForReset && _dbValue <= _noBarkDbInUse)
+        {
+            Debug.Log($"can detect bark again...: {_dbValue}");
+            _waitingForReset = false;
         }
 
         _lastDb = _dbValue;
