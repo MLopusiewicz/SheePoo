@@ -8,16 +8,28 @@ public class BarkController : MonoBehaviour
     [SerializeField] private InputActionReference _barkInputAction;
     [SerializeField] private float _maxBarkPressTime = 1f;
     [SerializeField] private float _barkCooldownTime = 0.5f;
+    [SerializeField] private BarkRepel _repel;
+    [SerializeField] private MicrophoneBarkDetector _mic;
 
     private float _elapsedTime;
 
+    public UnityEvent<float> MicrophoneVolumeUpdate;
     public UnityEvent<float> OnKeyboardBarkPressProgress;
 
     public UnityEvent<float> OnBarkEvent;
     public UnityEvent OnBarkRecoveryEvent;
+    public UnityEvent<float> CooldownUpdate;
 
+    // Progress bar of the keyboard input
     public float BarkPressTimeNormalized { get; private set; }
+
+    // Cooldown of the bark
     public float CooldownTimer => _cooldownTimer;
+
+    // Max area of influence of the bark
+    public float BarkMaxArea => _repel.BarkMaxArea;
+
+    public float MicrophoneVolume => _mic.DBValue;
 
     public event Action<float> OnBark;
     public event Action OnBarkRecovery;
@@ -60,6 +72,9 @@ public class BarkController : MonoBehaviour
             BarkPressTimeNormalized = Mathf.Lerp(BarkPressTimeNormalized, 0f, Time.deltaTime * 10f);
             OnKeyboardBarkPressProgress?.Invoke(BarkPressTimeNormalized);
         }
+
+        MicrophoneVolumeUpdate?.Invoke(_mic.DBValue);
+        CooldownUpdate?.Invoke(_cooldownTimer);
     }
 
     private void FireRecovery()
@@ -96,6 +111,8 @@ public class BarkController : MonoBehaviour
     {
         OnBark?.Invoke(barkStrength);
         OnBarkEvent?.Invoke(barkStrength);
+
+        _repel.DoBark(barkStrength);
 
         _cooldownTimer = _barkCooldownTime;
         _elapsedTime = 0f;

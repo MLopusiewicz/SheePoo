@@ -12,6 +12,8 @@ public class BarkRepel : MonoBehaviour
     
     private Collider[] _results = new Collider[20];
 
+    public float BarkMaxArea => _maxArea;
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -20,7 +22,7 @@ public class BarkRepel : MonoBehaviour
         Gizmos.DrawWireSphere(_playerTransform.position, _maxArea);
     }
 
-    public void OnBarkReceived(float barkIntensity)
+    public void DoBark(float barkIntensity)
     {
         var hitCount = Physics.OverlapSphereNonAlloc(_playerTransform.position, Mathf.Lerp(_minArea, _maxArea, barkIntensity), _results);
 
