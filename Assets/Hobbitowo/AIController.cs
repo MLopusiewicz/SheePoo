@@ -40,6 +40,7 @@ namespace Hobbitowo
 
         public void ToggleAgent(bool toggle)
         {
+            Animator.enabled = toggle;
             Agent.enabled = toggle;
             // Agent.isStopped = !toggle;
             // Agent.updatePosition = toggle;

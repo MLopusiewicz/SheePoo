@@ -31,16 +31,16 @@ public class CollisionController : MonoBehaviour
     {
         if (isBarked)
         {
-            CollisionController collisionController = other.collider.GetComponent<CollisionController>();
-            if (other.gameObject.CompareTag("Agent"))
+            // things that are agents are 
+            if(other.collider.TryGetComponent<CollisionController>(out var otherCollisionController))
             {
-                SetAIComponentsActive(collisionController, true);
+                SetAIComponentsActive(otherCollisionController, true);
             }
         }
     }
 
     public void RepelFrom(Vector3 epicenter, float intensity)
-    {
+    {   
         SetBarkedStatus(true);
         SetAIComponentsActive(this, true);
         var dir = rb.position - epicenter;
@@ -51,14 +51,13 @@ public class CollisionController : MonoBehaviour
     public void SetBarkedStatus(bool value)
     {
         isBarked = value;
+        //Debug.Log($"This sheep is barked: {isBarked}");
     }
 
     private void SetAIComponentsActive(CollisionController collisionController, bool barkedStatus)
     {
         collisionController.SetBarkedStatus(barkedStatus);
-        AIController agent = collisionController.GetComponent<AIController>();
-        agent.Agent.enabled = !barkedStatus;
-        agent.enabled = !barkedStatus;
+        aIController.ToggleAgent(!barkedStatus);
     }
 
     private void TryReactivateAIComponents(GameObject gameObject)

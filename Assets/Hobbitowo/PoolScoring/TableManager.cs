@@ -15,7 +15,7 @@ namespace Hobbitowo.PoolScoring
         {
             _holes = new List<TableHole>(GetComponentsInChildren<TableHole>());
             _aiControllers = new List<AIController>(GetComponentsInChildren<AIController>());
-            var ratio = _aiControllers.Count / _holes.Count; 
+            var ratio = _holes.Count == 0? 0: _aiControllers.Count / _holes.Count; 
             _holes.ForEach((h) => h.InitializeTable(this, ratio));
         }
 

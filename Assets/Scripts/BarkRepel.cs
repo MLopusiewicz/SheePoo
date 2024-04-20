@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BarkRepel : MonoBehaviour
 {
+    [SerializeField] private LayerMask _layerMask;
     [SerializeField] private Transform _playerTransform;
     [SerializeField] private float _minImpulse = 1f;
     [SerializeField] private float _minArea = 1f;
@@ -24,7 +25,7 @@ public class BarkRepel : MonoBehaviour
 
     public void DoBark(float barkIntensity)
     {
-        var hitCount = Physics.OverlapSphereNonAlloc(_playerTransform.position, Mathf.Lerp(_minArea, _maxArea, barkIntensity), _results);
+        var hitCount = Physics.OverlapSphereNonAlloc(_playerTransform.position, Mathf.Lerp(_minArea, _maxArea, barkIntensity), _results, _layerMask);
 
         var intensity = Mathf.Lerp(_minImpulse, _maxImpulse, barkIntensity);
 
