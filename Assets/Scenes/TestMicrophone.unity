@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 418890410}
   - component: {fileID: 418890409}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: Indicators
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -831,6 +831,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1987406814977582819, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
+      propertyPath: OnKeyboardBarkPressProgress.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2018973684}
     - target: {fileID: 6428375073488591543, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
       propertyPath: _minToBark
       value: 
