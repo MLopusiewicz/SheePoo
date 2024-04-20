@@ -28,7 +28,7 @@ public class MicrophoneBarkDetector : MonoBehaviour
     private float _lastDb;
     private float _highestDb;
 
-    private bool _hadSilenceBefore = true;
+    private bool _canBark = true;
 
     private Coroutine _corroutine;
 
@@ -136,8 +136,8 @@ public class MicrophoneBarkDetector : MonoBehaviour
         }
 
         var rmsValue = Mathf.Sqrt(sumOfSquares / _samples.Length);
-        var dbValue = 20f * Mathf.Log10(rmsValue);
-        if (dbValue < MinDB) dbValue = MinDB;
+        var currentDBbValue = 20f * Mathf.Log10(rmsValue);
+        if (currentDBbValue < MinDB) currentDBbValue = MinDB;
 
         // dB as they show in the audio mixer
 
@@ -152,47 +152,28 @@ public class MicrophoneBarkDetector : MonoBehaviour
             _maxBarkDbInUse = _noBarkDbInUse + _maxBarkAdditionalDb;
         }
 
-        var justCrossedThreshold = dbValue > _minBarkDbInUse && _lastDb <= _minBarkDbInUse;
-        if (_hadSilenceBefore && justCrossedThreshold)
-        {
-            Debug.Log($"bark chance starting...: {dbValue}");
+        if (currentDBbValue > _dbValue) _dbValue = currentDBbValue;
+        else _dbValue = Mathf.Lerp(_dbValue, currentDBbValue, Time.deltaTime * _downLerpStrength);
 
-            _highestDb = _minBarkDbInUse;
-            // actually give a window of time to see if it gets higher
-            _hadSilenceBefore = false;
-            _corroutine = StartCoroutine(WaitForPeak());
+        var justCrossedThreshold = _dbValue > _minBarkDbInUse && _lastDb <= _minBarkDbInUse;
+        if (_canBark && justCrossedThreshold)
+        {
+            Debug.Log($"bark chance starting...: {_dbValue}");
+
+            _highestDb = _dbValue;
+            _canBark = false;
         }
-
-        IEnumerator WaitForPeak()
+        else if (!_canBark)
         {
-            var t = 0f;
-            while(t < _barkWindowOfTime)
-            {
-                t += Time.deltaTime;
-                _highestDb = Mathf.Max(_highestDb, _dbValue);
-                yield return null;
-            }
+            _highestDb = Mathf.Max(_highestDb, _dbValue);
 
-            if(_highestDb > _minBarkDbInUse) Bark();
-            _corroutine = null;
-        }
-
-        if (_dbValue < _noBarkDbInUse)
-        {
-            if (_corroutine != null) StopCoroutine(_corroutine);
-            _corroutine = null;
-
-            if (!_hadSilenceBefore)
+            if (_dbValue < _lastDb)
             {
                 Bark();
+                _canBark = true;
+                _highestDb = MinDB;
             }
-
-            _highestDb = MinDB;
-            _hadSilenceBefore = true;
         }
-
-        if (dbValue > _dbValue) _dbValue = dbValue;
-        else _dbValue = Mathf.Lerp(_dbValue, dbValue, Time.deltaTime * _downLerpStrength);
 
         _lastDb = _dbValue;
     }

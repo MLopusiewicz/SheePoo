@@ -291,7 +291,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _barkInputAction: {fileID: -5258047582734227999, guid: cdcdd632234d4ab4a8d145a003a1f2d0, type: 3}
   _maxBarkPressTime: 1
-  _barkCooldownTime: 0.5
+  _barkCooldownTime: 0
 --- !u!114 &538808155
 MonoBehaviour:
   m_ObjectHideFlags: 0
