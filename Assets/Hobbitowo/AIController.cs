@@ -21,7 +21,7 @@ namespace Hobbitowo
 
         private void Update()
         {
-            if(!Agent) return;
+            if(!Agent || !Agent.enabled) return;
             RandomMovementBehaviour();
         }
 
@@ -36,6 +36,14 @@ namespace Hobbitowo
         private void GoToPosition(Vector3 destination)
         {
             Agent.SetDestination(destination);
+        }
+
+        public void ToggleAgent(bool toggle)
+        {
+            Agent.enabled = toggle;
+            // Agent.isStopped = !toggle;
+            // Agent.updatePosition = toggle;
+            // Agent.updateRotation = toggle;
         }
     }
 }
