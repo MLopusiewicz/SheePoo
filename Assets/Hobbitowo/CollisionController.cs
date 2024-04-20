@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ public class CollisionController : MonoBehaviour
     {
         if (isBarked)
         {
-            ReactivateAIComponents(gameObject);
+            TryReactivateAIComponents(gameObject);
         }
     }
 
@@ -33,9 +34,17 @@ public class CollisionController : MonoBehaviour
             CollisionController collisionController = other.collider.GetComponent<CollisionController>();
             if (other.gameObject.CompareTag("Agent"))
             {
-                SetAIComponentsActive(collisionController, true, false);
+                SetAIComponentsActive(collisionController, true);
             }
         }
+    }
+
+    public void RepelFrom(Vector3 epicenter, float intensity)
+    {
+        SetBarkedStatus(true);
+        SetAIComponentsActive(this, true);
+        var dir = rb.position - epicenter;
+        rb.AddForce(dir * intensity, ForceMode.Impulse);
     }
 
     // To be called if the dog barking area hits the agent
@@ -44,19 +53,19 @@ public class CollisionController : MonoBehaviour
         isBarked = value;
     }
 
-    private void SetAIComponentsActive(CollisionController collisionController, bool barkedStatus, bool componentsStatus)
+    private void SetAIComponentsActive(CollisionController collisionController, bool barkedStatus)
     {
         collisionController.SetBarkedStatus(barkedStatus);
         AIController agent = collisionController.GetComponent<AIController>();
-        agent.Agent.enabled = componentsStatus;
-        agent.enabled = componentsStatus;
+        agent.Agent.enabled = !barkedStatus;
+        agent.enabled = !barkedStatus;
     }
 
-    private void ReactivateAIComponents(GameObject gameObject)
+    private void TryReactivateAIComponents(GameObject gameObject)
     {
         if (rb.velocity.magnitude < rbVelocity)
         {
-            SetAIComponentsActive(this, false, true);
+            SetAIComponentsActive(this, false);
         }
     }
 }

@@ -24,6 +24,7 @@ public class BarkController : MonoBehaviour
 
     private float _cooldownTimer = 0f;
 
+
     private void OnEnable()
     {
         _barkInputAction.action.started += OnBarkStart;
