@@ -1,16 +1,19 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BarkStrengthVisualizer : MonoBehaviour
 {
-
     [SerializeField] private MicrophoneBarkDetector _microphoneBark;
     [SerializeField] private float _minScale;
     [SerializeField] private float _maxScale;
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         if(_microphoneBark.HasMicrophone && !_microphoneBark.IsWaitingForCalibration)
@@ -28,6 +31,7 @@ public class BarkStrengthVisualizer : MonoBehaviour
             Handles.DrawWireDisc(transform.position, Vector3.forward, Remap(_microphoneBark.MaxBarkDB));
         }
     }
+#endif
 
     private float Remap(float dB)
     {

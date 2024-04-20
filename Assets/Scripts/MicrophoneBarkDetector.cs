@@ -45,8 +45,6 @@ public class MicrophoneBarkDetector : MonoBehaviour
     public float MinBarkDB => _minBarkDbInUse;
     public float MaxBarkDB => _maxBarkDbInUse;
     public float DBValue => _dbValue;
-    public float DBValueNormalizedToBarkRange => Mathf.InverseLerp(_minBarkDbInUse, _maxBarkDbInUse, _dbValue);
-
     public float NoBarkDB => _noBarkDb;
 
     private bool _hadSilenceBefore = true;
