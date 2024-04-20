@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -17,9 +18,6 @@ public class MicrophoneBarkDetector : MonoBehaviour
     [SerializeField] private float _noBarkDb = -30f;
     [SerializeField] private float _minBarkDb = -20f;
     [SerializeField] private float _maxBarkDb = 0f;
-
-    [Header("Bark Controller")]
-    [SerializeField] private BarkController _barkController;
 
     private AudioSource _audioSource;
     private float[] _samples = new float[1024];
@@ -49,6 +47,8 @@ public class MicrophoneBarkDetector : MonoBehaviour
 
     private bool _hadSilenceBefore = true;
     private bool _waitingForReset;
+
+    public event Action<float> OnMicrophoneBark;
 
     private void Awake()
     {
@@ -190,7 +190,7 @@ public class MicrophoneBarkDetector : MonoBehaviour
     {
         var barkStrength = Mathf.InverseLerp(_minBarkDbInUse, _maxBarkDbInUse, _highestDb);
         //Debug.Log($"--- Bark at: {_highestDb}, as 0-1: {barkStrength}");
-        _barkController.ForceBark(barkStrength);
+        OnMicrophoneBark?.Invoke(barkStrength);
     }
 }
 

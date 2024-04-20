@@ -41,12 +41,16 @@ public class BarkController : MonoBehaviour
     {
         _barkInputAction.action.started += OnBarkStart;
         _barkInputAction.action.canceled += OnBarkEnd;
+
+        _mic.OnMicrophoneBark += ForceBark;
     }
 
     private void OnDisable()
     {
         _barkInputAction.action.started -= OnBarkStart;
         _barkInputAction.action.canceled -= OnBarkEnd;
+
+        _mic.OnMicrophoneBark -= ForceBark;
     }
 
     private void Update()
