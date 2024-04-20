@@ -11,6 +11,8 @@ public class BarkController : MonoBehaviour
 
     private float _elapsedTime;
 
+    public UnityEvent<float> OnKeyboardBarkPressProgress;
+
     public UnityEvent<float> OnBarkEvent;
     public UnityEvent OnBarkRecoveryEvent;
 
@@ -50,10 +52,12 @@ public class BarkController : MonoBehaviour
         {
             _elapsedTime += Time.deltaTime;
             BarkPressTimeNormalized = Mathf.InverseLerp(0f, _maxBarkPressTime, _elapsedTime);
+            OnKeyboardBarkPressProgress?.Invoke(BarkPressTimeNormalized);
         }
         else
         {
             BarkPressTimeNormalized = Mathf.Lerp(BarkPressTimeNormalized, 0f, Time.deltaTime * 10f);
+            OnKeyboardBarkPressProgress?.Invoke(BarkPressTimeNormalized);
         }
     }
 
