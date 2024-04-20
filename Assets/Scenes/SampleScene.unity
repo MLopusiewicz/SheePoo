@@ -1538,39 +1538,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1517856113}
   m_CullTransparentMesh: 1
---- !u!1 &1654849450 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6972849402259202198, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
-  m_PrefabInstance: {fileID: 5752248930540252699}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1654849455 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4198997032668215498, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
   m_PrefabInstance: {fileID: 5752248930540252699}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1654849450}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f5de7ac77f9384e4bb8ac78b6216a253, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1654849458
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1654849450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de433fd41f90b1240b0d9318c5bf3178, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _playerTransform: {fileID: 67623164}
-  _minImpulse: 0.5
-  _minArea: 1.65
-  _maxImpulse: 2
-  _maxArea: 4.04
 --- !u!1 &1756691917
 GameObject:
   m_ObjectHideFlags: 0
@@ -2126,17 +2104,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1987406814977582819, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
-      propertyPath: _mic
-      value: 
-      objectReference: {fileID: 1654849455}
-    - target: {fileID: 1987406814977582819, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
-      propertyPath: _repel
-      value: 
-      objectReference: {fileID: 1654849458}
-    - target: {fileID: 1987406814977582819, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
       propertyPath: OnKeyboardBarkPressProgress.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2018973684}
+    - target: {fileID: 4552976977131572029, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
+      propertyPath: _playerTransform
+      value: 
+      objectReference: {fileID: 67623164}
     - target: {fileID: 6428375073488591543, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
       propertyPath: _minToBark
       value: 
@@ -2156,10 +2130,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6972849402259202198, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1654849458}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
