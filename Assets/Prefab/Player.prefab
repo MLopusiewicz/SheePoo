@@ -293,7 +293,6 @@ GameObject:
   - component: {fileID: 6914478704454433869}
   - component: {fileID: 5109278429120022763}
   - component: {fileID: 3786869561453992709}
-  - component: {fileID: 2080384710223705380}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -413,36 +412,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &2080384710223705380
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8847224283667583043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de115e0d9d663514daaa2c34a9342371, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _barkInputAction: {fileID: -5258047582734227999, guid: cdcdd632234d4ab4a8d145a003a1f2d0, type: 3}
-  _maxBarkPressTime: 1
-  _barkCooldownTime: 0.5
-  OnBarkEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8686011360193097021}
-        m_TargetAssemblyTypeName: BarkVisual, Assembly-CSharp
-        m_MethodName: Bark
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1001 &889931400574418455
 PrefabInstance:
   m_ObjectHideFlags: 0
