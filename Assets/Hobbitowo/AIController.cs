@@ -37,5 +37,12 @@ namespace Hobbitowo
         {
             Agent.SetDestination(destination);
         }
+
+        public void ToggleAgent(bool toggle)
+        {
+            Agent.isStopped = !toggle;
+            Agent.updatePosition = toggle;
+            Agent.updateRotation = toggle;
+        }
     }
 }
