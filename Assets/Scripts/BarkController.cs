@@ -29,7 +29,14 @@ public class BarkController : MonoBehaviour
     // Max area of influence of the bark
     public float BarkMaxArea => _repel.BarkMaxArea;
 
-    public float MicrophoneVolume => _mic.DBValue;
+    public float MicrophoneVolume 
+    {
+        get 
+        {
+            var dbInvertedNormalized = Mathf.InverseLerp(MicrophoneBarkDetector.MinDB, MicrophoneBarkDetector.MaxDB, _mic.DBValue);
+            return dbInvertedNormalized;
+        }
+    }
 
     public event Action<float> OnBark;
     public event Action OnBarkRecovery;
