@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -15,6 +14,7 @@ public class PlayerController : MonoBehaviour {
     BarkVisual barkVisual;
     public float force;
     public float R;
+
     private void Awake() {
         bark.action.Enable();
         barkVisual = GetComponentInChildren<BarkVisual>();
@@ -30,8 +30,7 @@ public class PlayerController : MonoBehaviour {
         Vector3 pos = rb.position + screenSpaceDir * Time.deltaTime * walkSpeed;
         rb.MovePosition(pos);
         var dir = pos - lastPos;
-        rb.rotation *= Quaternion.AngleAxis(dir.magnitude / R * Mathf.Rad2Deg, transform.InverseTransformVector(Vector3.Cross(-dir, Vector3.up)));
-
+        rb.rotation *= Quaternion.AngleAxis(dir.magnitude / R * Mathf.Rad2Deg * Random.Range(0.5f, 1), transform.InverseTransformVector(Vector3.Cross(-dir, Vector3.up)));
     }
 
     public void Bark(float size) {
