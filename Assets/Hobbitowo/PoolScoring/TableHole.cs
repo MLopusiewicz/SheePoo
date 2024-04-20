@@ -24,7 +24,6 @@ namespace Hobbitowo.PoolScoring
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!other.CompareTag("Sheep")) return;
             var lamb = other.GetComponent<AIController>();
             if(!lamb) return;
             //other.gameObject.SetActive(false);
