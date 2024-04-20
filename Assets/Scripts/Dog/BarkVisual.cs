@@ -7,7 +7,8 @@ public class BarkVisual : MonoBehaviour {
     public float barkValue;
     public float barkAnim;
     public Transform t;
-    public void Bark() {
+    public void Bark(float v) {
+        barkValue = v;
         Debug.Log("Barking");
         anim.Play("Bark");
     }
