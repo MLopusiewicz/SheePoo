@@ -1,45 +1,62 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Hobbitowo;
 using UnityEngine;
 
 public class CollisionController : MonoBehaviour
 {
-    [SerializeField] private LayerMask AgentLayer;
     private AIController aIController;
+    private Rigidbody rb;
+    [SerializeField] private float rbVelocity = 0.06f;
 
     [SerializeField] private bool isBarked = false;
     
     private void Awake()
     {
         aIController = GetComponent<AIController>();
+        rb = GetComponent<Rigidbody>();
+    }
+
+    private void Update()
+    {
+        if (isBarked)
+        {
+            ReactivateAIComponents(gameObject);
+        }
     }
 
     private void OnCollisionEnter(Collision other)
     {
-        if (isBarked && other.gameObject.CompareTag("Agent"))
+        if (isBarked)
         {
             CollisionController collisionController = other.collider.GetComponent<CollisionController>();
-            collisionController.SetBarked(true);
-
             if (other.gameObject.CompareTag("Agent"))
             {
-                collisionController.SetBarked(true);
-                SetAIComponentsActive(other, false);
+                SetAIComponentsActive(collisionController, true, false);
             }
         }
     }
 
     // To be called if the dog barking area hits the agent
-    public void SetBarked(bool value)
+    public void SetBarkedStatus(bool value)
     {
         isBarked = value;
     }
 
-    private void SetAIComponentsActive(Collision collision, bool status)
+    private void SetAIComponentsActive(CollisionController collisionController, bool barkedStatus, bool componentsStatus)
     {
-        AIController agent = collision.collider.GetComponent<AIController>();
-        agent.Agent.enabled = status;
-        agent.enabled = status;
+        collisionController.SetBarkedStatus(barkedStatus);
+        AIController agent = collisionController.GetComponent<AIController>();
+        agent.Agent.enabled = componentsStatus;
+        agent.enabled = componentsStatus;
+    }
+
+    private void ReactivateAIComponents(GameObject gameObject)
+    {
+        if (rb.velocity.magnitude < rbVelocity)
+        {
+            SetAIComponentsActive(this, false, true);
+        }
     }
 }
