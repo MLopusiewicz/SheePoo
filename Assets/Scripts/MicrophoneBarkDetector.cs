@@ -5,6 +5,7 @@ using UnityEngine;
 public class MicrophoneBarkDetector : MonoBehaviour
 {
     [SerializeField] private float _barkWindowOfTime = 0.2f;
+    [SerializeField] private float _downLerpStrength = 10f;
 
     [Header("Auto calibrate")]
     [SerializeField] private bool _autoCalibrate;
@@ -31,10 +32,23 @@ public class MicrophoneBarkDetector : MonoBehaviour
 
     private Coroutine _corroutine;
 
-    private const float MinDB = -160f;
+    private float _detectedMinDb;
+    private float _minBarkDbInUse = -20f;
+    private float _maxBarkDbInUse = 0f;
+    private float _noBarkDbInUse = 0f;
+
+    public const float MinDB = -160f;
+    public const float MaxDB = 20f;
 
     public bool HasMicrophone { get; private set; }
     public bool IsWaitingForCalibration { get; private set; }
+
+    public float MinBarkDB => _minBarkDbInUse;
+    public float MaxBarkDB => _maxBarkDbInUse;
+    public float DBValue => _dbValue;
+    public float DBValueNormalizedToBarkRange => Mathf.InverseLerp(_minBarkDbInUse, _maxBarkDbInUse, _dbValue);
+
+    public float NoBarkDB => _noBarkDb;
 
     private void Awake()
     {
@@ -51,7 +65,7 @@ public class MicrophoneBarkDetector : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
 
         _audioSource.loop = true;
-        var clip = Microphone.Start(null, true, 1, 44100);
+        var clip = Microphone.Start(null, true, 1, AudioSettings.outputSampleRate);
 
         _audioSource.clip = clip;
 
@@ -87,9 +101,7 @@ public class MicrophoneBarkDetector : MonoBehaviour
 
             Debug.Log($"Max DB found: {peak}");
 
-            _noBarkDb = peak;
-            _minBarkDb = _noBarkDb + _minBarkAdditionalDb;
-            _maxBarkDb = _noBarkDb + _maxBarkAdditionalDb;
+            _detectedMinDb = peak;
 
             IsWaitingForCalibration = false;
         }
@@ -124,18 +136,29 @@ public class MicrophoneBarkDetector : MonoBehaviour
         }
 
         var rmsValue = Mathf.Sqrt(sumOfSquares / _samples.Length);
-        _dbValue = 20f * Mathf.Log10(rmsValue);
-        if (_dbValue < MinDB) _dbValue = MinDB;
+        var dbValue = 20f * Mathf.Log10(rmsValue);
+        if (dbValue < MinDB) dbValue = MinDB;
 
         // dB as they show in the audio mixer
 
-        var justCrossedThreshold = _dbValue > _minBarkDb && _lastDb <= _minBarkDb;
+        _minBarkDbInUse = _minBarkDb;
+        _maxBarkDbInUse = _maxBarkDb;
+        _noBarkDbInUse = _noBarkDb;
+
+        if (_autoCalibrate)
+        {
+            _noBarkDbInUse = _detectedMinDb;
+            _minBarkDbInUse = _noBarkDbInUse + _minBarkAdditionalDb;
+            _maxBarkDbInUse = _noBarkDbInUse + _maxBarkAdditionalDb;
+        }
+
+        var justCrossedThreshold = dbValue > _minBarkDbInUse && _lastDb <= _minBarkDbInUse;
         if (_hadSilenceBefore && justCrossedThreshold)
         {
-            //Debug.Log("bark chance starting...");
+            Debug.Log($"bark chance starting...: {dbValue}");
 
-            _highestDb = _minBarkDb;
-            // actually give a window of a few secs to see if it gets higher
+            _highestDb = _minBarkDbInUse;
+            // actually give a window of time to see if it gets higher
             _hadSilenceBefore = false;
             _corroutine = StartCoroutine(WaitForPeak());
         }
@@ -150,11 +173,11 @@ public class MicrophoneBarkDetector : MonoBehaviour
                 yield return null;
             }
 
-            if(_highestDb > _minBarkDb) Bark();
+            if(_highestDb > _minBarkDbInUse) Bark();
             _corroutine = null;
         }
 
-        if (_dbValue < _noBarkDb)
+        if (_dbValue < _noBarkDbInUse)
         {
             if (_corroutine != null) StopCoroutine(_corroutine);
             _corroutine = null;
@@ -168,12 +191,15 @@ public class MicrophoneBarkDetector : MonoBehaviour
             _hadSilenceBefore = true;
         }
 
+        if (dbValue > _dbValue) _dbValue = dbValue;
+        else _dbValue = Mathf.Lerp(_dbValue, dbValue, Time.deltaTime * _downLerpStrength);
+
         _lastDb = _dbValue;
     }
 
     private void Bark()
     {
-        var barkStrength = Mathf.InverseLerp(_minBarkDb, _maxBarkDb, _highestDb);
+        var barkStrength = Mathf.InverseLerp(_minBarkDbInUse, _maxBarkDbInUse, _highestDb);
         //Debug.Log($"--- Bark at: {_highestDb}, as 0-1: {barkStrength}");
         _barkController.ForceBark(barkStrength);
     }

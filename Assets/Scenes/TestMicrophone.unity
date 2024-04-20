@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 538808151}
   - component: {fileID: 538808154}
   - component: {fileID: 538808155}
+  - component: {fileID: 538808156}
   m_Layer: 0
   m_Name: Microphone
   m_TagString: Untagged
@@ -156,10 +157,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _barkWindowOfTime: 0.2
+  _downLerpStrength: 7
   _autoCalibrate: 1
   _calibrationTime: 1
-  _minBarkAdditionalDb: 27
-  _maxBarkAdditionalDb: 48
+  _minBarkAdditionalDb: 20
+  _maxBarkAdditionalDb: 32
   _noBarkDb: -40
   _minBarkDb: -30
   _maxBarkDb: -10
@@ -320,6 +322,21 @@ MonoBehaviour:
   m_DefaultActionMap: Game
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &538808156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 538808150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f06dff4f8c35e442ae6a2263558785d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _microphoneBark: {fileID: 538808151}
+  _minScale: 1
+  _maxScale: 10
 --- !u!1 &857897023
 GameObject:
   m_ObjectHideFlags: 0
