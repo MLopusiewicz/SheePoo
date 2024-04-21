@@ -28,9 +28,12 @@ namespace Hobbitowo.PoolScoring
         {
             var lamb = other.GetComponent<AIController>();
             if(!lamb) return;
+            if (lamb.GetComponent<CollisionController>().isBarked == true)
+            {
+                StartCoroutine(ScoreAnimation(lamb));
+            }
             //other.gameObject.SetActive(false);
             //_tableManager.AddScore();
-            StartCoroutine(ScoreAnimation(lamb));
         }
 
         private IEnumerator ScoreAnimation(AIController lamb)
