@@ -12,7 +12,7 @@ public class CollisionController : MonoBehaviour
     private Rigidbody rb;
     [SerializeField] private float rbVelocity = 0.06f;
 
-    [SerializeField] private bool isBarked = false;
+    [SerializeField] public bool isBarked = false;
     [SerializeField] private AudioContainer collisionContainer;
     
     private void Awake()
@@ -62,7 +62,7 @@ public class CollisionController : MonoBehaviour
         aIController.ToggleAgent(!barkedStatus);
     }
 
-    private void TryReactivateAIComponents(GameObject gameObject)
+    public void TryReactivateAIComponents(GameObject gameObject)
     {
         if (rb.velocity.magnitude < rbVelocity)
         {
