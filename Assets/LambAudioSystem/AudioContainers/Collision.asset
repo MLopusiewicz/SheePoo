@@ -13,4 +13,23 @@ MonoBehaviour:
   m_Name: Collision
   m_EditorClassIdentifier: 
   <MasterVolume>k__BackingField: 1
-  <Layers>k__BackingField: []
+  <Layers>k__BackingField:
+  - <Clips>k__BackingField:
+    - {fileID: 8300000, guid: 44a64cd13ac6ec94fb5551e653d4776f, type: 3}
+    - {fileID: 8300000, guid: e2d48880971177745a76cfc0252649f8, type: 3}
+    - {fileID: 8300000, guid: 869d310017d454d41b3ad249da655a62, type: 3}
+    - {fileID: 8300000, guid: 2ebcbc08319eabe498e66cd3480fddc4, type: 3}
+    - {fileID: 8300000, guid: fd59cefed25d277448668b3aad9294a4, type: 3}
+    - {fileID: 8300000, guid: 1f24db499b1f30b48a027de4364c28e0, type: 3}
+    - {fileID: 8300000, guid: 6e7e3bd629b511946aeb6d7699650772, type: 3}
+    - {fileID: 8300000, guid: 18ee5fc3cf1e5c04bbc9b299ef81790f, type: 3}
+    - {fileID: 8300000, guid: 0903c78b60e02fe40af69a1f74ece5c3, type: 3}
+    - {fileID: 8300000, guid: 5edbdc88a460d2a43a0ce716df666ba6, type: 3}
+    - {fileID: 8300000, guid: 492611c9c62774f4ea6d603823ab0130, type: 3}
+    - {fileID: 8300000, guid: ea9c42c9501e9e04a80c3c8225dbb9f5, type: 3}
+    - {fileID: 8300000, guid: ed4d3694379c4b54ea17c49f70356e0d, type: 3}
+    - {fileID: 8300000, guid: 410bc188bd71fb144beb56c38d32b3b4, type: 3}
+    - {fileID: 8300000, guid: fa91175af2f8a5e49992c2371f8a0a6f, type: 3}
+    <Offset>k__BackingField: 0
+    <Volume>k__BackingField: 0.7
+    <Pitch>k__BackingField: 1
