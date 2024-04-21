@@ -8,11 +8,13 @@ public class MarkerController : MonoBehaviour {
     public int requirement;
     public int score = 0;
     public Animator anim;
-    public TableHole hole;
+    TableHole hole;
     public event Action OnCompleted;
+
     private void Awake() {
         hole = GetComponentInParent<TableHole>();
         hole.OnScored += AddScore;
+        text.text = $"{score}/{requirement}";
     }
 
     public void AddScore() {
