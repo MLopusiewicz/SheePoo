@@ -3,14 +3,13 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
-public class MicrophoneBarkDetector : MonoBehaviour
-{
+public class MicrophoneBarkDetector : MonoBehaviour {
     [SerializeField] private float _barkWindowOfTime = 0.2f;
     [SerializeField] private float _downLerpStrength = 10f;
 
     [Header("Auto calibrate")]
     [SerializeField] private bool _autoCalibrate;
-    [SerializeField] private float _calibrationTime = 0.2f;
+    [SerializeField] private float _calibrationTime = 0.2f; 
     [SerializeField] private float _minBarkAdditionalDb = 20f;
     [SerializeField] private float _maxBarkAdditionalDb = 40f;
 
@@ -50,15 +49,12 @@ public class MicrophoneBarkDetector : MonoBehaviour
 
     public event Action<float> OnMicrophoneBark;
 
-    private void Awake()
-    {
+    private void Awake() {
         HasMicrophone = Microphone.devices.Length > 0;
     }
 
-    private IEnumerator Start()
-    {
-        if (!HasMicrophone)
-        {
+    private IEnumerator Start() {
+        if (!HasMicrophone) {
             Debug.Log("No Mic!");
             yield break;
         }
@@ -71,14 +67,12 @@ public class MicrophoneBarkDetector : MonoBehaviour
 
         _audioSource.Play();
 
-        if (_autoCalibrate)
-        {
+        if (_autoCalibrate) {
             IsWaitingForCalibration = true;
 
             var t = 0f;
             var peak = MinDB;
-            while(t < _calibrationTime)
-            {
+            while (t < _calibrationTime) {
                 Debug.Log($"Pos: {Microphone.GetPosition(null)}");
 
                 t += Time.deltaTime;
@@ -86,8 +80,7 @@ public class MicrophoneBarkDetector : MonoBehaviour
                 _audioSource.GetOutputData(_samples, 0);
 
                 var sumOfSquares = 0f;
-                for (var i = 0; i < _samples.Length; i++)
-                {
+                for (var i = 0; i < _samples.Length; i++) {
                     sumOfSquares += _samples[i] * _samples[i];
                 }
 
@@ -107,8 +100,7 @@ public class MicrophoneBarkDetector : MonoBehaviour
         }
     }
 
-    private void OnDisable()
-    {
+    private void OnDisable() {
         if (!HasMicrophone) return;
 
         _audioSource.Stop();
@@ -117,21 +109,18 @@ public class MicrophoneBarkDetector : MonoBehaviour
         Microphone.End(null);
     }
 
-    private void OnDestroy()
-    {
+    private void OnDestroy() {
         if (_corroutine != null) StopCoroutine(_corroutine);
         _corroutine = null;
     }
 
-    private void Update()
-    {
+    private void Update() {
         if (!HasMicrophone || IsWaitingForCalibration) return;
 
         _audioSource.GetOutputData(_samples, 0);
 
         var sumOfSquares = 0f;
-        for (var i = 0; i < _samples.Length; i++)
-        {
+        for (var i = 0; i < _samples.Length; i++) {
             sumOfSquares += _samples[i] * _samples[i];
         }
 
@@ -145,8 +134,7 @@ public class MicrophoneBarkDetector : MonoBehaviour
         _maxBarkDbInUse = _maxBarkDb;
         _noBarkDbInUse = _noBarkDb;
 
-        if (_autoCalibrate)
-        {
+        if (_autoCalibrate) {
             _noBarkDbInUse = _detectedMinDb;
             _minBarkDbInUse = _noBarkDbInUse + _minBarkAdditionalDb;
             _maxBarkDbInUse = _noBarkDbInUse + _maxBarkAdditionalDb;
@@ -156,20 +144,15 @@ public class MicrophoneBarkDetector : MonoBehaviour
         else _dbValue = Mathf.Lerp(_dbValue, currentDBbValue, Time.deltaTime * _downLerpStrength);
 
         var justCrossedThreshold = _dbValue > _minBarkDbInUse && _lastDb <= _minBarkDbInUse;
-        if (!_waitingForReset && _hadSilenceBefore && justCrossedThreshold)
-        {
+        if (!_waitingForReset && _hadSilenceBefore && justCrossedThreshold) {
             Debug.Log($"bark chance starting...: {_dbValue}");
 
             _highestDb = _dbValue;
             _hadSilenceBefore = false;
-        }
-        
-        else if (!_hadSilenceBefore && !_waitingForReset)
-        {
+        } else if (!_hadSilenceBefore && !_waitingForReset) {
             _highestDb = Mathf.Max(_highestDb, _dbValue);
 
-            if (_dbValue < _lastDb)
-            {
+            if (_dbValue < _lastDb) {
                 Bark();
                 _waitingForReset = true;
                 _hadSilenceBefore = true;
@@ -177,8 +160,7 @@ public class MicrophoneBarkDetector : MonoBehaviour
             }
         }
 
-        if(_waitingForReset && _dbValue <= _noBarkDbInUse)
-        {
+        if (_waitingForReset && _dbValue <= _noBarkDbInUse) {
             Debug.Log($"can detect bark again...: {_dbValue}");
             _waitingForReset = false;
         }
@@ -186,8 +168,7 @@ public class MicrophoneBarkDetector : MonoBehaviour
         _lastDb = _dbValue;
     }
 
-    private void Bark()
-    {
+    private void Bark() {
         var barkStrength = Mathf.InverseLerp(_minBarkDbInUse, _maxBarkDbInUse, _highestDb);
         //Debug.Log($"--- Bark at: {_highestDb}, as 0-1: {barkStrength}");
         OnMicrophoneBark?.Invoke(barkStrength);
