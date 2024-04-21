@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -30,10 +31,9 @@ namespace Hobbitowo
 
         private void RandomMovementBehaviour()
         {
-            if (IsIdle)
-            {
-                GoToPosition(AIManager.Instance.SampleRandomDestination());
-            }
+            if (!IsIdle && Agent.pathStatus != NavMeshPathStatus.PathInvalid) return;
+            var sampledPosition = AIManager.Instance.SampleRandomDestination();
+            if(sampledPosition != Vector3.positiveInfinity) GoToPosition(sampledPosition);
         }
 
         private void GoToPosition(Vector3 destination)
@@ -45,6 +45,7 @@ namespace Hobbitowo
         {
             Animator.enabled = toggle;
             Agent.enabled = toggle;
+            //Rigidbody.isKinematic = !toggle;
             // Agent.isStopped = !toggle;
             // Agent.updatePosition = toggle;
             // Agent.updateRotation = toggle;
@@ -55,6 +56,11 @@ namespace Hobbitowo
             ToggleAgent(false);
             Rigidbody.isKinematic = true;
             _trailRenderer.enabled = true;
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.DrawLine(transform.position, Agent.destination);
         }
     }
 }
