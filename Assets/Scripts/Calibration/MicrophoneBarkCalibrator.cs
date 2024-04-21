@@ -62,6 +62,11 @@ public class MicrophoneBarkCalibrator : MonoBehaviour
 
     private float RangeOfVolume(float db)
     {
+        if(float.IsNaN(db) || float.IsInfinity(db) || float.IsNegativeInfinity(db))
+        {
+            return 0f;
+        }
+
         return Mathf.InverseLerp(MinDB, MaxDB, db);
     }
 
