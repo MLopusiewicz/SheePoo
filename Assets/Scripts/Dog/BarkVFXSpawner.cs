@@ -6,11 +6,18 @@ using UnityEngine;
 public class BarkVFXSpawner : MonoBehaviour {
 
     public GameObject prefab;
-
+    public float offset = 0.5f;
+    public BarkController controller;
     public void Bark(float f) {
+        Debug.Log("Barked at: " + f);
         var go = GameObject.Instantiate(prefab);
-        go.transform.localScale = Vector3.one * f;
-        go.transform.position = Vector3.ProjectOnPlane(transform.position, Vector3.up) + Vector3.up * 0.01f;
-
+        go.transform.localScale = Vector3.one * controller.BarkMaxArea * f;
+        go.transform.position = transform.position - Vector3.up * offset;
+        go.transform.rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up), Vector3.up);
+        StartCoroutine(DelayedDestroy(go));
+    }
+    IEnumerator DelayedDestroy(GameObject go) {
+        yield return new WaitForSeconds(2f);
+        Destroy(go);
     }
 }

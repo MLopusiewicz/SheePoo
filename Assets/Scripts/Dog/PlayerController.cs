@@ -14,7 +14,9 @@ public class PlayerController : MonoBehaviour {
     BarkVisual barkVisual;
     public float force;
     public float R;
-
+    public Vector2 lastInput;
+    public float fff = 0.03f;
+    public float drag = 0.03f;
     private void Awake() {
         bark.action.Enable();
         barkVisual = GetComponentInChildren<BarkVisual>();
@@ -24,6 +26,9 @@ public class PlayerController : MonoBehaviour {
 
     private void FixedUpdate() {
         var v = move.action.ReadValue<Vector2>();
+        if (v.magnitude < fff) {
+            v = Vector2.MoveTowards(lastInput, v, drag);
+        }
         Vector3 forward = Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up);
         var screenSpaceDir = forward * v.y + Camera.main.transform.right * v.x;
         Vector3 lastPos = rb.position;
@@ -31,6 +36,7 @@ public class PlayerController : MonoBehaviour {
         rb.MovePosition(pos);
         var dir = pos - lastPos;
         rb.rotation *= Quaternion.AngleAxis(dir.magnitude / R * Mathf.Rad2Deg * Random.Range(0.5f, 1), transform.InverseTransformVector(Vector3.Cross(-dir, Vector3.up)));
+        lastInput = v;
     }
 
     public void Bark(float size) {
