@@ -46,10 +46,15 @@ public class BarkStrengthVisualizer : MonoBehaviour
             var dbInvertedNormalized = Mathf.InverseLerp(MicrophoneBarkDetector.MinDB, MicrophoneBarkDetector.MaxDB, _microphoneBark.DBValue);
             var minInvertedNormalized = Mathf.InverseLerp(MicrophoneBarkDetector.MinDB, MicrophoneBarkDetector.MaxDB, _microphoneBark.MinBarkDB);
 
-            _volume.value = dbInvertedNormalized;
-            _minBark.value = minInvertedNormalized;
+            if(_volume != null) _volume.value = dbInvertedNormalized;
+            if (_minBark != null) _minBark.value = minInvertedNormalized;
 
-            _volumeColor.color = dbInvertedNormalized > minInvertedNormalized ? _barkColor : _noBarkColor;
+            if(_volumeColor != null)_volumeColor.color = dbInvertedNormalized > minInvertedNormalized ? _barkColor : _noBarkColor;
+        }
+        else
+        {
+            if (_volume != null) _volume.value = 0f;
+            if (_minBark != null) _minBark.value = 0f;
         }
     }
 
