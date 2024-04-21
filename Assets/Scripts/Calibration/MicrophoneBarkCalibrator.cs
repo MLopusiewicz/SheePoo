@@ -57,6 +57,7 @@ public class MicrophoneBarkCalibrator : MonoBehaviour
     private void Awake()
     {
         HasMicrophone = Microphone.devices.Length > 0;
+        Debug.Log($"HAS MIC: {HasMicrophone}");
     }
 
     private float RangeOfVolume(float db)
@@ -81,16 +82,22 @@ public class MicrophoneBarkCalibrator : MonoBehaviour
         _audioSource.loop = true;
         var clip = Microphone.Start(null, true, 1, AudioSettings.outputSampleRate);
 
+        while(Microphone.GetPosition(null) <= 0)
+        {
+            yield return null;
+        }
+
         _audioSource.clip = clip;
 
         _audioSource.Play();
 
         IsWaitingForCalibration = true;
 
+        var t = 0f;
 
         while (IsWaitingForCalibration)
         {
-            var t = 0f;
+            t = 0f;
             var db = MinDB;
             var currentDb = MinDB;
             var silenceCandidate = MinDB;
@@ -201,8 +208,20 @@ public class MicrophoneBarkCalibrator : MonoBehaviour
         HasCalibration = true;
 
         IsWaitingForCalibration = false;
+        t = 0f;
+        while (t < _calibrationTime * 0.5f)
+        {
+            t += Time.deltaTime;
 
-        yield return new WaitForSeconds(_calibrationTime);
+            var remainingt = (_calibrationTime * 0.5f) - t;
+
+            OnSilenceTargetChanged?.Invoke(RangeOfVolume(_maxAllowedSilenceDb));
+            OnCountDownUpdated?.Invoke(remainingt);
+            OnCountDownTextUpdated?.Invoke($"{remainingt:F0}");
+
+            yield return null;
+        }
+
         OnCalibrationDone?.Invoke();
     }
 
