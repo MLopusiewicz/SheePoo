@@ -13,6 +13,12 @@ public class BarkStrengthVisualizer : MonoBehaviour
     [SerializeField] private float _minScale;
     [SerializeField] private float _maxScale;
 
+    [SerializeField] private Color _barkColor;
+    [SerializeField] private Color _noBarkColor;
+    [SerializeField] private Image _volumeColor;
+    [SerializeField] private Slider _volume;
+    [SerializeField] private Slider _minBark;
+
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
@@ -32,6 +38,25 @@ public class BarkStrengthVisualizer : MonoBehaviour
         }
     }
 #endif
+
+    private void Update()
+    {
+        if (_microphoneBark.HasMicrophone && !_microphoneBark.IsWaitingForCalibration)
+        {
+            var dbInvertedNormalized = Mathf.InverseLerp(MicrophoneBarkDetector.MinDB, MicrophoneBarkDetector.MaxDB, _microphoneBark.DBValue);
+            var minInvertedNormalized = Mathf.InverseLerp(MicrophoneBarkDetector.MinDB, MicrophoneBarkDetector.MaxDB, _microphoneBark.MinBarkDB);
+
+            if(_volume != null) _volume.value = dbInvertedNormalized;
+            if (_minBark != null) _minBark.value = minInvertedNormalized;
+
+            if(_volumeColor != null)_volumeColor.color = dbInvertedNormalized > minInvertedNormalized ? _barkColor : _noBarkColor;
+        }
+        else
+        {
+            if (_volume != null) _volume.value = 0f;
+            if (_minBark != null) _minBark.value = 0f;
+        }
+    }
 
     private float Remap(float dB)
     {
