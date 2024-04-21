@@ -62,7 +62,7 @@ public class CollisionController : MonoBehaviour
         aIController.ToggleAgent(!barkedStatus);
     }
 
-    private void TryReactivateAIComponents(GameObject gameObject)
+    public void TryReactivateAIComponents(GameObject gameObject)
     {
         if (rb.velocity.magnitude < rbVelocity)
         {
