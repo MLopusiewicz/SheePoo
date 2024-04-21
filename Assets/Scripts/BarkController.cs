@@ -10,6 +10,7 @@ public class BarkController : MonoBehaviour
     [SerializeField] private float _barkCooldownTime = 0.5f;
     [SerializeField] private BarkRepel _repel;
     [SerializeField] private MicrophoneBarkDetector _mic;
+    [SerializeField] private Cinemachine.CinemachineImpulseSource _impulseSource;
 
     private float _elapsedTime;
 
@@ -124,6 +125,7 @@ public class BarkController : MonoBehaviour
     {
         OnBark?.Invoke(barkStrength);
         OnBarkEvent?.Invoke(barkStrength);
+        _impulseSource.GenerateImpulseWithForce(barkStrength / 2);
 
         _repel?.DoBark(barkStrength);
 
