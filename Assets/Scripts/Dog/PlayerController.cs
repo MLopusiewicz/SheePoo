@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using HobbitAudio;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Cinemachine;
 
 public class PlayerController : MonoBehaviour {
 
@@ -16,6 +18,8 @@ public class PlayerController : MonoBehaviour {
     public float R;
 
     public float repelImpulse = 1f;
+    public AudioContainer bounceContainer;
+    public CinemachineImpulseSource bounceImpulse;
 
     private void Awake() {
         bark.action.Enable();
@@ -30,6 +34,8 @@ public class PlayerController : MonoBehaviour {
         {
             rb.AddForce(collision.contacts[0].normal * repelImpulse, ForceMode.Impulse);
             collision.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            AudioInstancesManager.Instance.Play(bounceContainer, transform);
+            bounceImpulse.GenerateImpulse();
         }
     }
 
