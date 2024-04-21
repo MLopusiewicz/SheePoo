@@ -67,7 +67,14 @@ public class MicrophoneBarkDetector : MonoBehaviour {
 
         _audioSource.Play();
 
-        if (_autoCalibrate) {
+        if (MicrophoneBarkCalibrator.HasCalibration)
+        {
+            _noBarkDb = MicrophoneBarkCalibrator.NoBarkDb;
+            _minBarkDb = MicrophoneBarkCalibrator.MinBarkDb;
+            _maxBarkDb = MicrophoneBarkCalibrator.MaxBarkDb;
+        }
+        else if (_autoCalibrate)
+        {
             IsWaitingForCalibration = true;
 
             var t = 0f;
@@ -134,7 +141,8 @@ public class MicrophoneBarkDetector : MonoBehaviour {
         _maxBarkDbInUse = _maxBarkDb;
         _noBarkDbInUse = _noBarkDb;
 
-        if (_autoCalibrate) {
+        if (!MicrophoneBarkCalibrator.HasCalibration && _autoCalibrate)
+        {
             _noBarkDbInUse = _detectedMinDb;
             _minBarkDbInUse = _noBarkDbInUse + _minBarkAdditionalDb;
             _maxBarkDbInUse = _noBarkDbInUse + _maxBarkAdditionalDb;
