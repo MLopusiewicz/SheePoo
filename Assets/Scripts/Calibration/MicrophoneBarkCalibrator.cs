@@ -9,6 +9,8 @@ public class MicrophoneBarkCalibrator : MonoBehaviour
     [Header("Auto calibrate")]
     [SerializeField] private float _calibrationTime = 0.2f;
     [SerializeField] private float _loudnessThresholdDb = 20f;
+    [SerializeField] private float _maxAllowedSilenceDb = -30f;
+    [SerializeField] private float _downLerpStrength = 10f;
 
     public static bool HasCalibration;
     public static float NoBarkDb = -30f;
@@ -16,15 +18,18 @@ public class MicrophoneBarkCalibrator : MonoBehaviour
     public static float MaxBarkDb = 0f;
 
     public UnityEvent<float> OnVolumeChanged;
-    public UnityEvent<float> OnMinCandidateChanged;
-
-    public UnityEvent<bool> OnMinCandidate;
-    public UnityEvent<bool> OnCalibrated;
-    public UnityEvent<bool> OnNotCalibrated;
-    public UnityEvent<bool> OnNoMinCandidate;
     public UnityEvent<float> OnMinTargetChanged;
+    public UnityEvent<float> OnSilenceTargetChanged;
 
+    public UnityEvent OnCalibrationSilenceStarted;
+    public UnityEvent OnCalibrationBarkStarted;
+    public UnityEvent OnCalibrationBarkEnded;
     public UnityEvent OnCalibrationDone;
+    public UnityEvent OnCalibrationFailed;
+
+    public UnityEvent<float> OnCountDownUpdated;
+    public UnityEvent<string> OnCountDownTextUpdated;
+
 
     public float CurrentVolumeDb 
     { 
@@ -63,10 +68,8 @@ public class MicrophoneBarkCalibrator : MonoBehaviour
     {
         HasCalibration = false;
 
-        OnMinCandidate?.Invoke(false);
-        OnNoMinCandidate?.Invoke(true);
-        OnNotCalibrated?.Invoke(false);
-        OnCalibrated?.Invoke(false);
+        OnSilenceTargetChanged?.Invoke(RangeOfVolume(_maxAllowedSilenceDb));
+        OnCalibrationSilenceStarted?.Invoke();
 
         if (!HasMicrophone)
         {
@@ -88,11 +91,18 @@ public class MicrophoneBarkCalibrator : MonoBehaviour
         while (IsWaitingForCalibration)
         {
             var t = 0f;
-            var peak = MinDB;
+            var db = MinDB;
+            var currentDb = MinDB;
+            var silenceCandidate = MinDB;
             Debug.Log($"Please be quiet, calibrating base loudness...");
             while (t < _calibrationTime)
             {
                 t += Time.deltaTime;
+                var remainingt = _calibrationTime - t;
+
+                OnSilenceTargetChanged?.Invoke(RangeOfVolume(_maxAllowedSilenceDb));
+                OnCountDownUpdated?.Invoke(remainingt);
+                OnCountDownTextUpdated?.Invoke($"{remainingt:F0}");
 
                 _audioSource.GetOutputData(_samples, 0);
 
@@ -103,15 +113,13 @@ public class MicrophoneBarkCalibrator : MonoBehaviour
                 }
 
                 var rmsValue = Mathf.Sqrt(sumOfSquares / _samples.Length);
-                var db = 20f * Mathf.Log10(rmsValue);
+                currentDb = 20f * Mathf.Log10(rmsValue);
 
-                peak = Mathf.Max(peak, db);
-
-                if (peak + _loudnessThresholdDb >= MaxDB)
+                if (currentDb + _loudnessThresholdDb < MaxDB && currentDb > db)
                 {
-                    t = 0f;
-                    peak = MinDB;
+                    db = currentDb;
                 }
+                else db = Mathf.Lerp(db, currentDb, Time.deltaTime * _downLerpStrength);
 
                 CurrentVolumeDb = db;
 
@@ -119,12 +127,18 @@ public class MicrophoneBarkCalibrator : MonoBehaviour
             }
 
 
-            NoBarkDb = peak;
-            OnMinCandidateChanged?.Invoke(RangeOfVolume(NoBarkDb));
-            OnMinCandidate?.Invoke(true);
-            OnNoMinCandidate?.Invoke(false);
+            NoBarkDb = db;
+
+            if(NoBarkDb > _maxAllowedSilenceDb)
+            {
+                OnCalibrationFailed?.Invoke();
+                continue;
+            }
+
             OnMinTargetChanged?.Invoke(RangeOfVolume(NoBarkDb + _loudnessThresholdDb));
-            Debug.Log($"Base DB found: {peak}");
+            OnCalibrationBarkStarted?.Invoke();
+
+            Debug.Log($"Base DB found: {silenceCandidate}");
 
             t = 0f;
             var reachedMinThreshold = false;
@@ -135,6 +149,9 @@ public class MicrophoneBarkCalibrator : MonoBehaviour
             while (t < _calibrationTime && !reachedMinThreshold)
             {
                 t += Time.deltaTime;
+                var remainingt = _calibrationTime - t;
+                OnCountDownUpdated?.Invoke(remainingt);
+                OnCountDownTextUpdated?.Invoke($"{remainingt:F0}");
 
                 _audioSource.GetOutputData(_samples, 0);
 
@@ -145,21 +162,21 @@ public class MicrophoneBarkCalibrator : MonoBehaviour
                 }
 
                 var rmsValue = Mathf.Sqrt(sumOfSquares / _samples.Length);
-                var db = 20f * Mathf.Log10(rmsValue);
+                currentDb = 20f * Mathf.Log10(rmsValue);
 
-                CurrentVolumeDb = db;
+                CurrentVolumeDb = currentDb;
 
-                if (db < lastVolume && reachedMinThreshold)
+                if (currentDb < lastVolume && reachedMinThreshold)
                 {
                     break;
                 }
 
-                if (db > NoBarkDb + _loudnessThresholdDb)
+                if (currentDb > NoBarkDb + _loudnessThresholdDb)
                 {
                     reachedMinThreshold = true;
                 }
 
-                lastVolume = db;
+                lastVolume = currentDb;
 
                 yield return null;
             }
@@ -174,16 +191,12 @@ public class MicrophoneBarkCalibrator : MonoBehaviour
             else
             {
                 Debug.Log("Those values don't really work, try to be quiet first and loud when requested");
-                OnMinCandidateChanged?.Invoke(RangeOfVolume(MinDB));
-                OnMinCandidate?.Invoke(false);
-                OnNoMinCandidate?.Invoke(true);
-                OnNotCalibrated?.Invoke(false);
-                OnCalibrated?.Invoke(false);
+                OnCalibrationFailed?.Invoke();
             }
         }
 
         Debug.Log($"Loud DB found: yell between {MinBarkDb} and {MaxBarkDb}, calibration done");
-        OnCalibrated?.Invoke(true);
+        OnCalibrationBarkEnded?.Invoke();
 
         HasCalibration = true;
 

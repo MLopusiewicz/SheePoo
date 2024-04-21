@@ -20,6 +20,8 @@ public class BarkController : MonoBehaviour
     public UnityEvent OnBarkRecoveryEvent;
     public UnityEvent<float> CooldownUpdate;
 
+    
+
     // Progress bar of the keyboard input
     public float BarkPressTimeNormalized { get; private set; }
 
