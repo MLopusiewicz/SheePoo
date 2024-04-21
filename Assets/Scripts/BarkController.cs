@@ -123,7 +123,7 @@ public class BarkController : MonoBehaviour
         OnBark?.Invoke(barkStrength);
         OnBarkEvent?.Invoke(barkStrength);
 
-        _repel.DoBark(barkStrength);
+        _repel?.DoBark(barkStrength);
 
         _cooldownTimer = _barkCooldownTime;
         _elapsedTime = 0f;
