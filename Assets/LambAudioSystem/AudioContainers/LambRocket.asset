@@ -31,8 +31,3 @@ MonoBehaviour:
     <Offset>k__BackingField: 0
     <Volume>k__BackingField: 0.113
     <Pitch>k__BackingField: 1
-  - <Clips>k__BackingField:
-    - {fileID: 8300000, guid: 881c07c1ddfe7a34cb8f8f8860723cb7, type: 3}
-    <Offset>k__BackingField: 0
-    <Volume>k__BackingField: 0.541
-    <Pitch>k__BackingField: 1
