@@ -15,6 +15,7 @@ namespace Hobbitowo.PoolScoring
         private TableManager _tableManager;
         private Vector3 _launchPosition;
         private CinemachineImpulseSource _cinemachineImpulseSource;
+        public Action OnScored;
         public void InitializeTable(TableManager tableManager, int lambsNeeded)
         {
             _tableManager = tableManager;
@@ -45,6 +46,7 @@ namespace Hobbitowo.PoolScoring
             }
             lamb.gameObject.SetActive(false);
             _tableManager.AddScore();
+            OnScored?.Invoke();
         }
     }
 }
