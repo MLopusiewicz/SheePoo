@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Hobbitowo;
+using HobbitAudio;
 using UnityEngine;
 
 public class CollisionController : MonoBehaviour
@@ -12,6 +13,7 @@ public class CollisionController : MonoBehaviour
     [SerializeField] private float rbVelocity = 0.06f;
 
     [SerializeField] private bool isBarked = false;
+    [SerializeField] private AudioContainer collisionContainer;
     
     private void Awake()
     {
