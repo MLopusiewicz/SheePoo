@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using Cinemachine;
 using HobbitAudio;
+using DG.Tweening;
 
 namespace Hobbitowo.PoolScoring
 {
@@ -21,16 +22,20 @@ namespace Hobbitowo.PoolScoring
             _tableManager = tableManager;
             LambsNeeded = lambsNeeded;
             _cinemachineImpulseSource = GetComponent<CinemachineImpulseSource>();
-            _launchPosition = transform.position + new Vector3(0, 50.0f, 0);
+            _launchPosition = transform.position + new Vector3(0, 15.0f, 0);
         }
 
         private void OnTriggerEnter(Collider other)
         {
             var lamb = other.GetComponent<AIController>();
             if(!lamb) return;
+            if (lamb.CollisionController.isBarked == true)
+            {
+                StartCoroutine(ScoreAnimation(lamb));
+                //ScoreAnimation(lamb);
+            }
             //other.gameObject.SetActive(false);
             //_tableManager.AddScore();
-            StartCoroutine(ScoreAnimation(lamb));
         }
 
         private IEnumerator ScoreAnimation(AIController lamb)
@@ -39,6 +44,7 @@ namespace Hobbitowo.PoolScoring
             _cinemachineImpulseSource.GenerateImpulseAtPositionWithVelocity(transform.position, transform.up / 2);
             AudioInstancesManager.Instance.Play(audioContainer, transform);
             particles.Play();
+            
             while (Vector3.Distance(lamb.transform.position, _launchPosition) > 0.125f)
             {
                 lamb.transform.position = Vector3.LerpUnclamped(lamb.transform.position, _launchPosition, Time.deltaTime * 5);
