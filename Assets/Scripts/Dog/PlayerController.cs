@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using HobbitAudio;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Cinemachine;
 
 public class PlayerController : MonoBehaviour {
 
@@ -17,11 +19,27 @@ public class PlayerController : MonoBehaviour {
     public Vector2 lastInput;
     public float fff = 0.03f;
     public float drag = 0.03f;
+
+    public float repelImpulse = 1f;
+    public AudioContainer bounceContainer;
+    public CinemachineImpulseSource bounceImpulse;
+
     private void Awake() {
         bark.action.Enable();
         barkVisual = GetComponentInChildren<BarkVisual>();
         bark.action.performed += (x) => Bark(1);
         rb = GetComponent<Rigidbody>();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Sheep"))
+        {
+            rb.AddForce(collision.contacts[0].normal * repelImpulse, ForceMode.Impulse);
+            collision.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            AudioInstancesManager.Instance.Play(bounceContainer, transform);
+            bounceImpulse.GenerateImpulse();
+        }
     }
 
     private void FixedUpdate() {

@@ -74,6 +74,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Agent>k__BackingField: {fileID: 6815148817342369235}
   <Animator>k__BackingField: {fileID: 840352293959076322}
+  <Rigidbody>k__BackingField: {fileID: 8680332381996352513}
 --- !u!114 &2970482608094292880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -593,7 +594,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 2c7ac1bb18efa7b4fbe5f113bc335215, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
