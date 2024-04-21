@@ -8,6 +8,8 @@ namespace Hobbitowo
     {
         [field: SerializeField] public NavMeshAgent Agent { get; private set; }
         [field: SerializeField] public Animator Animator { get; private set; }
+        [field: SerializeField] public Rigidbody Rigidbody { get; private set; }
+        private TrailRenderer _trailRenderer;
 
         private bool IsIdle =>
             Agent.remainingDistance < Agent.stoppingDistance + Agent.radius + 0.01f;
@@ -16,7 +18,8 @@ namespace Hobbitowo
 
         private void Start()
         {
-
+            _trailRenderer = GetComponentInChildren<TrailRenderer>();
+            _trailRenderer.enabled = false;
         }
 
         private void Update()
@@ -45,6 +48,13 @@ namespace Hobbitowo
             // Agent.isStopped = !toggle;
             // Agent.updatePosition = toggle;
             // Agent.updateRotation = toggle;
+        }
+
+        public void LaunchSheep()
+        {
+            ToggleAgent(false);
+            Rigidbody.isKinematic = true;
+            _trailRenderer.enabled = true;
         }
     }
 }

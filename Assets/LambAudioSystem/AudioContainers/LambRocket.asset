@@ -13,4 +13,21 @@ MonoBehaviour:
   m_Name: LambRocket
   m_EditorClassIdentifier: 
   <MasterVolume>k__BackingField: 1
-  <Layers>k__BackingField: []
+  <Layers>k__BackingField:
+  - <Clips>k__BackingField:
+    - {fileID: 8300000, guid: 2e6dccdc95668e74092396e2bb3b02c9, type: 3}
+    - {fileID: 8300000, guid: 1484317b9630a1e43a2cfef6b56380d7, type: 3}
+    - {fileID: 8300000, guid: d8b56935b1465074db661132dfc99fe0, type: 3}
+    - {fileID: 8300000, guid: 6cd4f56b2ba934848ba53bd0ca65b358, type: 3}
+    - {fileID: 8300000, guid: 43c4828bb6e781a45a3a94792efb290b, type: 3}
+    - {fileID: 8300000, guid: b469e45403c8b2747b867fd0abfdaede, type: 3}
+    - {fileID: 8300000, guid: 9611ddebd827f274fa83c5607648e5f5, type: 3}
+    - {fileID: 8300000, guid: 3e60fd0d5631df74b879b693a02234d3, type: 3}
+    <Offset>k__BackingField: 0.1
+    <Volume>k__BackingField: 1
+    <Pitch>k__BackingField: 1
+  - <Clips>k__BackingField:
+    - {fileID: 8300000, guid: 573e44d9f2eef574fbbaa814e5ef4b04, type: 3}
+    <Offset>k__BackingField: 0
+    <Volume>k__BackingField: 0.113
+    <Pitch>k__BackingField: 1

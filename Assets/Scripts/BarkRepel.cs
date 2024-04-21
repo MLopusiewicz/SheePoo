@@ -9,6 +9,7 @@ public class BarkRepel : MonoBehaviour
     [SerializeField] private float _minImpulse = 1f;
     [SerializeField] private float _minArea = 1f;
     [SerializeField] private float _maxImpulse = 10f;
+    [Tooltip("radius")]
     [SerializeField] private float _maxArea = 5f;
     
     private Collider[] _results = new Collider[20];

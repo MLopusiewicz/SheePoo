@@ -36,15 +36,27 @@ namespace HobbitAudio
         private void OnReleaseHandler(AudioInstance element)
         {
             element.gameObject.SetActive(false);
+            element.transform.parent = transform;
+            element.transform.localPosition = Vector3.zero;
         }
         #endregion
         public void Play(AudioContainer audioContainer)
         {
-            AudioInstance audioInstance;
-            for (int i = 0; i < audioContainer.Layers.Length; i++)
+            foreach (var t in audioContainer.Layers)
             {
-                audioInstance = Get();
-                audioInstance.Play(audioContainer.Layers[i], audioContainer.MasterVolume);
+                var audioInstance = Get();
+                audioInstance.Play(t, audioContainer.MasterVolume);
+            }
+        }
+        
+        public void Play(AudioContainer audioContainer, Transform origin)
+        {
+            foreach (var t in audioContainer.Layers)
+            {
+                var audioInstance = Get();
+                audioInstance.transform.parent = origin;
+                audioInstance.transform.localPosition = Vector3.zero;
+                audioInstance.Play(t, audioContainer.MasterVolume);
             }
         }
     }

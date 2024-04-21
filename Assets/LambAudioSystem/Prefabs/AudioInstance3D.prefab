@@ -50,11 +50,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4480074917504800869, guid: 9431fb481afc54d43876e5714c2f7322, type: 3}
       propertyPath: m_Name
-      value: AudioInstance2D Variant
+      value: AudioInstance3D
       objectReference: {fileID: 0}
     - target: {fileID: 8855299744836183248, guid: 9431fb481afc54d43876e5714c2f7322, type: 3}
       propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
-      value: 1
+      value: 0.537
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
