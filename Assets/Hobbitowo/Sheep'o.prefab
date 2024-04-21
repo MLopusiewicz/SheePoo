@@ -208,6 +208,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rbVelocity: 0.06
   isBarked: 0
+  collisionContainer: {fileID: 11400000, guid: 14e78f47de287b344b1a3d8f175f52c8, type: 2}
 --- !u!1 &2632937666692173828
 GameObject:
   m_ObjectHideFlags: 0
