@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -8,11 +6,11 @@ public class Timer : MonoBehaviour {
     public TextMeshProUGUI text;
     public float timeInSeconds;
     public event Action TimesUp;
-    public void Start() {
 
-    }
     private void Update() {
         timeInSeconds -= Time.deltaTime;
+        TimeSpan timeSpan = new TimeSpan(0, 0, (int)timeInSeconds);
+        text.text = string.Format("{0:00}:{1:00}", timeSpan.Minutes, timeSpan.Seconds);
         if (timeInSeconds <= 0) {
             TimesUp?.Invoke();
         }
