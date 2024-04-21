@@ -225,8 +225,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 8, y: 8, z: 8}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 16, y: 16, z: 16}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8619635934951852935}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -338,7 +338,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 5056652946996810463, guid: d2975ea8bde8bc642996795c24ac2ce5, type: 3}
-  offset: 0.3
+  offset: 0.15
   controller: {fileID: 320192788375317389}
 --- !u!1 &8847224283667583043
 GameObject:
@@ -371,7 +371,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5.453112, y: 1.21, z: -8.323771}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 852045205846186492}
@@ -447,11 +447,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   move: {fileID: 2016468375513783652, guid: cdcdd632234d4ab4a8d145a003a1f2d0, type: 3}
   bark: {fileID: -5258047582734227999, guid: cdcdd632234d4ab4a8d145a003a1f2d0, type: 3}
-  walkSpeed: 10
-  force: 0
+  walkSpeed: 6
   R: 0.5
-  lastInput: {x: 0, y: 0}
-  fff: 0.03
+  deadStickTreshhold: 0.03
   drag: 0.03
   repelImpulse: 1
   bounceContainer: {fileID: 11400000, guid: 0e9b5bd98385bf849a882a70ed42cdd6, type: 2}
@@ -664,12 +662,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1987406814977582819, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
       propertyPath: OnBarkEvent.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1987406814977582819, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
+      propertyPath: OnBarkRecoveryEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1987406814977582819, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
       propertyPath: MicrophoneVolumeUpdate.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1987406814977582819, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
+      propertyPath: OnBarkEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1913292620949791309}
     - target: {fileID: 1987406814977582819, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
       propertyPath: OnBarkEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -679,8 +685,16 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1987406814977582819, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
+      propertyPath: OnBarkEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Bark
+      objectReference: {fileID: 0}
+    - target: {fileID: 1987406814977582819, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
       propertyPath: OnBarkEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: Bark
+      objectReference: {fileID: 0}
+    - target: {fileID: 1987406814977582819, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
+      propertyPath: OnKeyboardBarkPressProgress.m_PersistentCalls.m_Calls.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1987406814977582819, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
       propertyPath: MicrophoneVolumeUpdate.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -693,6 +707,10 @@ PrefabInstance:
     - target: {fileID: 1987406814977582819, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
       propertyPath: MicrophoneVolumeUpdate.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: SetDB
+      objectReference: {fileID: 0}
+    - target: {fileID: 1987406814977582819, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
+      propertyPath: OnBarkEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BarkVFXSpawner, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1987406814977582819, guid: 35acbd1048c98e545b2f244e58b200be, type: 3}
       propertyPath: OnBarkEvent.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
