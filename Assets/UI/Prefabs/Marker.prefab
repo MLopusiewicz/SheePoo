@@ -105,7 +105,7 @@ RectTransform:
   m_GameObject: {fileID: 5239065926879904503}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.016410658, y: 0.20383382, z: 0.016410658}
+  m_LocalScale: {x: 0.01641066, y: 0.20383382, z: 0.01641066}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2460321150786408367}
@@ -219,7 +219,6 @@ MonoBehaviour:
   requirement: 4
   score: 0
   anim: {fileID: 279709634717624201}
-  hole: {fileID: 0}
 --- !u!1 &5309027545832242218
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,7 +254,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 241}
+  m_AnchoredPosition: {x: 0, y: 364}
   m_SizeDelta: {x: 562.42, y: 212.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &48714515188651204
@@ -5222,7 +5221,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 475}
+  m_AnchoredPosition: {x: 0, y: 168}
   m_SizeDelta: {x: 500, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3956428611622378219
