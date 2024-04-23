@@ -87,7 +87,9 @@ public class MicrophoneBarkCalibrator : MonoBehaviour
         _audioSource.loop = true;
         var clip = Microphone.Start(null, true, 1, AudioSettings.outputSampleRate);
 
-        while(Microphone.GetPosition(null) <= 0)
+        yield return new WaitForEndOfFrame();
+
+        while (Microphone.GetPosition(null) <= 0)
         {
             yield return null;
         }
@@ -127,7 +129,7 @@ public class MicrophoneBarkCalibrator : MonoBehaviour
                 var rmsValue = Mathf.Sqrt(sumOfSquares / _samples.Length);
                 currentDb = 20f * Mathf.Log10(rmsValue);
 
-                if (currentDb + _loudnessThresholdDb < MaxDB && currentDb > db)
+                if (currentDb + _loudnessThresholdDb < MaxDB && currentDb >= db)
                 {
                     db = currentDb;
                 }
