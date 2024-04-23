@@ -50,7 +50,7 @@ public class GameController : MonoBehaviour {
 
     public bool HasAnyMoreSheeps() {
         for (int i = 0; i < sheepContainer.childCount; i++)
-            if (sheepContainer.GetChild(i).gameObject.activeSelf)
+            if (sheepContainer.GetChild(i).gameObject.activeInHierarchy)
                 return true;
 
         return false;

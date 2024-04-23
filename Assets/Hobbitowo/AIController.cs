@@ -33,7 +33,8 @@ namespace Hobbitowo
 
         private void RandomMovementBehaviour()
         {
-            if (!IsIdle && Agent.pathStatus != NavMeshPathStatus.PathInvalid) return;
+            if (!IsIdle && Agent.pathStatus != NavMeshPathStatus.PathInvalid && 
+                !(IsIdle && Agent.velocity.sqrMagnitude < 0.02f)) return;
             var sampledPosition = AIManager.Instance.SampleRandomDestination();
             if(sampledPosition != Vector3.positiveInfinity) GoToPosition(sampledPosition);
         }

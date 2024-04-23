@@ -109,7 +109,7 @@ public class BarkController : MonoBehaviour
 
         var barkStrength = Mathf.InverseLerp(0f, _maxBarkPressTime, (float)context.duration);
         
-        Debug.Log($"Bark from keyboard at strength: {barkStrength}");
+        //Debug.Log($"Bark from keyboard at strength: {barkStrength}");
         FireBark(barkStrength);
     }
 
@@ -117,7 +117,7 @@ public class BarkController : MonoBehaviour
     {
         if (_cooldownTimer > 0f) return;
 
-        Debug.Log($"Bark from other input at strength: {barkStrength}");
+        //Debug.Log($"Bark from other input at strength: {barkStrength}");
         FireBark(barkStrength);
     }
 
