@@ -153,7 +153,7 @@ public class MicrophoneBarkDetector : MonoBehaviour {
 
         var justCrossedThreshold = _dbValue > _minBarkDbInUse && _lastDb <= _minBarkDbInUse;
         if (!_waitingForReset && _hadSilenceBefore && justCrossedThreshold) {
-            Debug.Log($"bark chance starting...: {_dbValue}");
+            //Debug.Log($"bark chance starting...: {_dbValue}");
 
             _highestDb = _dbValue;
             _hadSilenceBefore = false;
@@ -169,7 +169,7 @@ public class MicrophoneBarkDetector : MonoBehaviour {
         }
 
         if (_waitingForReset && _dbValue <= _noBarkDbInUse) {
-            Debug.Log($"can detect bark again...: {_dbValue}");
+            //Debug.Log($"can detect bark again...: {_dbValue}");
             _waitingForReset = false;
         }
 

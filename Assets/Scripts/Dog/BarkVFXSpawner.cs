@@ -9,7 +9,7 @@ public class BarkVFXSpawner : MonoBehaviour {
     public float offset = 0.5f;
     public BarkController controller;
     public void Bark(float f) {
-        Debug.Log("Barked at: " + f);
+        //Debug.Log("Barked at: " + f);
         var go = GameObject.Instantiate(prefab);
         go.transform.localScale = Vector3.one * controller.BarkMaxArea * f;
         go.transform.position = transform.position - Vector3.up * offset;

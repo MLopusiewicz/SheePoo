@@ -26,7 +26,7 @@ namespace Hobbitowo
         private bool MightBeStuck()
         {
             var vel = (transform.position - lastPosition).magnitude / (Time.time - lastTime);
-            Debug.Log($"Sheep {name}, vel: {vel}");
+            //Debug.Log($"Sheep {name}, vel: {vel}");
 
             lastPosition = transform.position;
             lastTime = Time.time;
