@@ -13,10 +13,26 @@ namespace Hobbitowo
         private TrailRenderer _trailRenderer;
         public CollisionController CollisionController { get; private set; }
 
+        [SerializeField] private float stuckThreshold = 0.05f;
+
         private bool IsIdle =>
             Agent.remainingDistance < Agent.stoppingDistance + Agent.radius + 0.01f;
 
         public float AgentVelocityFactor => Agent.velocity.magnitude / Agent.speed;
+
+        private Vector3 lastPosition;
+        private float lastTime;
+
+        private bool MightBeStuck()
+        {
+            var vel = (transform.position - lastPosition).magnitude / (Time.time - lastTime);
+            Debug.Log($"Sheep {name}, vel: {vel}");
+
+            lastPosition = transform.position;
+            lastTime = Time.time;
+
+            return vel < stuckThreshold;
+        }
 
         private void Start()
         {
@@ -33,8 +49,7 @@ namespace Hobbitowo
 
         private void RandomMovementBehaviour()
         {
-            if (!IsIdle && Agent.pathStatus != NavMeshPathStatus.PathInvalid && 
-                !(IsIdle && Agent.velocity.sqrMagnitude < 0.02f)) return;
+            if (!IsIdle && Agent.pathStatus != NavMeshPathStatus.PathInvalid && !MightBeStuck())return;
             var sampledPosition = AIManager.Instance.SampleRandomDestination();
             if(sampledPosition != Vector3.positiveInfinity) GoToPosition(sampledPosition);
         }
