@@ -8,6 +8,7 @@ public class Timer : MonoBehaviour {
     public event Action TimesUp;
 
     private void Update() {
+        if (timeInSeconds <= 0) return;
         timeInSeconds -= Time.deltaTime;
         TimeSpan timeSpan = new TimeSpan(0, 0, (int)timeInSeconds);
         text.text = string.Format("{0:00}:{1:00}", timeSpan.Minutes, timeSpan.Seconds);

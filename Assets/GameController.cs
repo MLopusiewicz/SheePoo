@@ -11,7 +11,6 @@ public class GameController : MonoBehaviour {
     public Image win, lose;
     public Transform sheepContainer;
     bool gameEnded = false;
-    float timer = 2f;
     public void Start() {
         t.TimesUp += () => EndGame(false);
         markers = new(GameObject.FindObjectsOfType<MarkerController>());
@@ -21,11 +20,8 @@ public class GameController : MonoBehaviour {
 
     }
     private void Update() {
-        timer -= Time.deltaTime;
-        if (timer <= 0) {
-            if (!HasAnyMoreSheeps())
-                EndGame(false);
-        }
+        if (!HasAnyMoreSheeps())
+            EndGame(false);
     }
 
     private void Completed(MarkerController a) {
@@ -37,7 +33,7 @@ public class GameController : MonoBehaviour {
 
     private void EndGame(bool isWin) {
         if (gameEnded) return;
-        gameEnded = false;
+        gameEnded = true;
 
         EndScreen.SetActive(true);
         win.gameObject.SetActive(isWin);
