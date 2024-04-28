@@ -41,7 +41,7 @@ namespace Hobbitowo.PoolScoring
         {
             lamb.LaunchSheep();
             _cinemachineImpulseSource.GenerateImpulseAtPositionWithVelocity(transform.position, transform.up / 2);
-            AudioInstancesManager.Instance.Play(launchAudioContainer, transform);
+            AudioInstancesManager.Instance.Play(launchAudioContainer);
             particles.Play();
             var timer = 0.0f;
             
