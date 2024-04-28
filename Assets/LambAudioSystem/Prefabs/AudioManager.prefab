@@ -45,7 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be00b581577771243a83952015b96780, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _audioInstanceTemplate: {fileID: 3322447511226308320, guid: c90a12aab12fff341a240e02e7892e60, type: 3}
+  _audioInstanceTemplate3D: {fileID: 3322447511226308320, guid: c90a12aab12fff341a240e02e7892e60, type: 3}
+  _audioInstanceTemplate2D: {fileID: 3412003616002145096, guid: 9431fb481afc54d43876e5714c2f7322, type: 3}
 --- !u!82 &817412611137244906
 AudioSource:
   m_ObjectHideFlags: 0

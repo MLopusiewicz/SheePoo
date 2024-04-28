@@ -6,25 +6,58 @@ namespace HobbitAudio
 {
     public class AudioInstancesManager : Singleton<AudioInstancesManager>
     {
-        [SerializeField] private AudioInstance _audioInstanceTemplate;
+        [SerializeField] private AudioInstance _audioInstanceTemplate3D;
+        [SerializeField] private AudioInstance _audioInstanceTemplate2D;
 
-        private IObjectPool<AudioInstance> _pool;
+        private IObjectPool<AudioInstance> _pool3D;
+        private IObjectPool<AudioInstance> _pool2D;
 
         private void Start()
         {
-            _pool = new ObjectPool<AudioInstance>(Create, OnGetHandler, OnReleaseHandler);
+            _pool2D = new ObjectPool<AudioInstance>(Create2D, OnGetHandler, OnReleaseHandler);
+            _pool3D = new ObjectPool<AudioInstance>(Create3D, OnGetHandler, OnReleaseHandler);
         }
-
+        
+        public void Play(AudioContainer audioContainer)
+        {
+            foreach (var t in audioContainer.Layers)
+            {
+                var audioInstance = Get2D();
+                audioInstance.Play(t, audioContainer.MasterVolume);
+            }
+        }
+        
+        public void Play(AudioContainer audioContainer, Transform origin)
+        {
+            foreach (var t in audioContainer.Layers)
+            {
+                var audioInstance = Get3D();
+                audioInstance.transform.parent = origin;
+                audioInstance.transform.localPosition = Vector3.zero;
+                audioInstance.Play(t, audioContainer.MasterVolume);
+            }
+        }
+        
         #region Pool
-        private AudioInstance Get()
+        private AudioInstance Get2D()
         {
-            return _pool.Get();
+            return _pool2D.Get();
+        }
+        private AudioInstance Get3D()
+        {
+            return _pool3D.Get();
+        }
+        private AudioInstance Create2D()
+        {
+            var element = Instantiate(_audioInstanceTemplate2D, transform);
+            element.Init(_pool2D);
+            return element;
         }
 
-        private AudioInstance Create()
+        private AudioInstance Create3D()
         {
-            var element = Instantiate(_audioInstanceTemplate, transform);
-            element.Init(_pool);
+            var element = Instantiate(_audioInstanceTemplate3D, transform);
+            element.Init(_pool3D);
             return element;
         }
 
@@ -40,24 +73,5 @@ namespace HobbitAudio
             element.transform.localPosition = Vector3.zero;
         }
         #endregion
-        public void Play(AudioContainer audioContainer)
-        {
-            foreach (var t in audioContainer.Layers)
-            {
-                var audioInstance = Get();
-                audioInstance.Play(t, audioContainer.MasterVolume);
-            }
-        }
-        
-        public void Play(AudioContainer audioContainer, Transform origin)
-        {
-            foreach (var t in audioContainer.Layers)
-            {
-                var audioInstance = Get();
-                audioInstance.transform.parent = origin;
-                audioInstance.transform.localPosition = Vector3.zero;
-                audioInstance.Play(t, audioContainer.MasterVolume);
-            }
-        }
     }
 }

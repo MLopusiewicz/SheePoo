@@ -4,13 +4,15 @@ using UnityEngine;
 using Cinemachine;
 using HobbitAudio;
 using DG.Tweening;
+using Unity.VisualScripting.FullSerializer.Internal.Converters;
 
 namespace Hobbitowo.PoolScoring
 {
     public class TableHole : MonoBehaviour
     {
         [SerializeField] private ParticleSystem particles;
-        [SerializeField] private AudioContainer audioContainer;
+        [SerializeField] private AudioContainer launchAudioContainer;
+        [SerializeField] private AudioContainer addScoreAudioContainer;
         
         public int LambsNeeded { get; private set; }
         private TableManager _tableManager;
@@ -32,26 +34,26 @@ namespace Hobbitowo.PoolScoring
             if (lamb.CollisionController.isBarked == true)
             {
                 StartCoroutine(ScoreAnimation(lamb));
-                //ScoreAnimation(lamb);
             }
-            //other.gameObject.SetActive(false);
-            //_tableManager.AddScore();
         }
 
         private IEnumerator ScoreAnimation(AIController lamb)
         {
             lamb.LaunchSheep();
             _cinemachineImpulseSource.GenerateImpulseAtPositionWithVelocity(transform.position, transform.up / 2);
-            AudioInstancesManager.Instance.Play(audioContainer, transform);
+            AudioInstancesManager.Instance.Play(launchAudioContainer, transform);
             particles.Play();
+            var timer = 0.0f;
             
-            while (Vector3.Distance(lamb.transform.position, _launchPosition) > 0.125f)
+            while (Vector3.Distance(lamb.transform.position, _launchPosition) > 0.125f || timer < 1.0f)
             {
                 lamb.transform.position = Vector3.LerpUnclamped(lamb.transform.position, _launchPosition, Time.deltaTime * 5);
+                timer += Time.deltaTime;
                 yield return new WaitForEndOfFrame();
             }
             lamb.gameObject.SetActive(false);
             _tableManager.AddScore();
+            AudioInstancesManager.Instance.Play(addScoreAudioContainer);
             OnScored?.Invoke();
         }
     }

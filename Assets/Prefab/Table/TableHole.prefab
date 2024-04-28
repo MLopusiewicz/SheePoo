@@ -170,7 +170,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   particles: {fileID: 6768570882092627578}
-  audioContainer: {fileID: 11400000, guid: f0ab48054079aeb4abc4b1035885b776, type: 2}
+  launchAudioContainer: {fileID: 11400000, guid: f0ab48054079aeb4abc4b1035885b776, type: 2}
+  addScoreAudioContainer: {fileID: 11400000, guid: c735c86410a5b4c4484eb36f0b956c4e, type: 2}
 --- !u!114 &9108233047248028936
 MonoBehaviour:
   m_ObjectHideFlags: 0

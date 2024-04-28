@@ -3,6 +3,7 @@ using HobbitAudio;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Cinemachine;
+using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour {
 
@@ -29,7 +30,7 @@ public class PlayerController : MonoBehaviour {
     private void OnCollisionEnter(Collision collision) {
         if (collision.gameObject.CompareTag("Sheep")) {
             rb.AddForce(collision.contacts[0].normal * repelImpulse, ForceMode.Impulse);
-            collision.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            //collision.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
             AudioInstancesManager.Instance.Play(bounceContainer, transform);
             bounceImpulse.GenerateImpulse();
         }
